@@ -1,6 +1,6 @@
 <?php
 
-class CharacterChallenge
+class CharacterObject
 {
     private $character;
     private $needsToHave;
@@ -38,29 +38,43 @@ class CharacterChallenge
     }
 
 }
+
+function getMatchedCharacterPositions
+(
+    $arr,
+    $charactersToFind
+) {
+    $positions = [];
+    for ($index = 0; $index < count($arr); $index++) {
+        $characterToFind = $arr[$index];
+        if (array_key_exists($characterToFind, $charactersToFind)) {
+            $characterObject = $charactersToFind[$characterToFind];
+            $characterObject->addPositionFounded($index);
+
+            $positions[$index] = $characterObject;
+        }
+    }
+    return $positions;
+}
 function noIterate($strArr)
 {
     // code goes here
-    /** @var array<string, CharacterChallenge> */
+    /** @var array<string, CharacterObject> */
     $charactersToFind = [];
     for ($index = 0; $index < strlen($strArr[1]); $index++) {
         $characterToFind = $strArr[1][$index];
         if (array_key_exists($characterToFind, $charactersToFind)) {
             $charactersToFind[$characterToFind]->increaseNeedsToHave();
         } else {
-            $charactersToFind[$characterToFind] = new CharacterChallenge($characterToFind);
+            $charactersToFind[$characterToFind] = new CharacterObject($characterToFind);
         }
     }
-    /** @var array<number, CharacterChallenge> */
-    $positions = [];
-
-    for ($index = 0; $index < strlen($strArr[0]); $index++) {
-        $characterToFind = $strArr[0][$index];
-        if (array_key_exists($characterToFind, $charactersToFind)) {
-            $charactersToFind[$characterToFind]->addPositionFounded($index);
-            $positions[$index] = $charactersToFind[$characterToFind];
-        }
-    }
+    
+    /** @var array<number, CharacterObject> */
+    $positions = getMatchedCharacterPositions(
+        str_split($strArr[0]),
+        $charactersToFind
+    );
 
     $start_index = 0;
     foreach ($positions as $position => $characterObject) {
