@@ -68,6 +68,23 @@ class SulfurasItem extends BasicItem
     }
 }
 
+class BackstagePassesItem extends BasicItem
+{
+    public function tick()
+    {
+        $this->increaseQuality();
+        if ($this->sellIn < 6) {
+            $this->increaseQuality(2);
+        } elseif ($this->sellIn < 11) {
+            $this->increaseQuality();
+        }
+        $this->decreaseSellIn();
+        if ($this->sellIn < 0) {
+            $this->quality = 0;
+        }
+    }
+}
+
 class BasicItemFactory
 {
     public static function create($name, $quality, $sellIn): BasicItem
@@ -79,6 +96,8 @@ class BasicItemFactory
                 return new BrieItem($quality, $sellIn);
             case 'Sulfuras, Hand of Ragnaros':
                 return new SulfurasItem($quality, $sellIn);
+            case 'Backstage passes to a TAFKAL80ETC concert':
+                return new BackstagePassesItem($quality, $sellIn);
             default:
                 throw new \InvalidArgumentException("Unknown item type: $name");
         }
