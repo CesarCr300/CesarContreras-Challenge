@@ -76,28 +76,35 @@ function shrinkPositionsArray($positions): int
     return $breakpoint;
 }
 
-function noIterate($strArr)
+function getCharactersToFind($charactersArray)
 {
-    // code goes here
-    /** @var array<string, CharacterObject> */
     $charactersToFind = [];
-    for ($index = 0; $index < strlen($strArr[1]); $index++) {
-        $characterToFind = $strArr[1][$index];
+    for ($index = 0; $index < strlen($charactersArray); $index++) {
+        $characterToFind = $charactersArray[$index];
         if (array_key_exists($characterToFind, $charactersToFind)) {
             $charactersToFind[$characterToFind]->increaseNeedsToHave();
         } else {
             $charactersToFind[$characterToFind] = new CharacterObject($characterToFind);
         }
     }
+    return $charactersToFind;
+}
 
+function noIterate($strArr)
+{
+    // code goes here
+    /** @var array<string, CharacterObject> */
+    $charactersToFind = getCharactersToFind($strArr[1]);
     /** @var array<number, CharacterObject> */
     $positions = getMatchedCharacterPositions(
         str_split($strArr[0]),
         $charactersToFind
     );
 
+    //Shrink from the left
     $start_index = shrinkPositionsArray($positions);
 
+    //Shrink from the right
     $end_index = shrinkPositionsArray(array_reverse($positions, true));
 
     return implode('', array_slice(str_split($strArr[0]), $start_index, $end_index - $start_index + 1));
