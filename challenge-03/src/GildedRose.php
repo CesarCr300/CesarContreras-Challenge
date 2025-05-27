@@ -50,6 +50,18 @@ class NormalItem extends BasicItem
     }
 }
 
+class BrieItem extends BasicItem
+{
+    public function tick()
+    {
+        $this->decreaseSellIn();
+        $this->increaseQuality();
+        if ($this->sellIn < 0) {
+            $this->increaseQuality();
+        }
+    }
+}
+
 class BasicItemFactory
 {
     public static function create($name, $quality, $sellIn): BasicItem
@@ -57,6 +69,8 @@ class BasicItemFactory
         switch ($name) {
             case 'normal':
                 return new NormalItem($name, $quality, $sellIn);
+            case 'Aged Brie':
+                return new BrieItem($name, $quality, $sellIn);
             default:
                 throw new \InvalidArgumentException("Unknown item type: $name");
         }
