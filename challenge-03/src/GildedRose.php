@@ -24,7 +24,7 @@ abstract class BasicItem implements IBasicItem
             $this->quality += $quantity;
         }
     }
-    public function decreaseQuantity($quantity = 1)
+    public function decreaseQuality($quantity = 1)
     {
         if ($this->quality > 0) {
             $this->quality -= $quantity;
@@ -41,9 +41,9 @@ class NormalItem extends BasicItem
     public function tick()
     {
         $this->decreaseSellIn();
-        $this->decreaseQuantity();
+        $this->decreaseQuality();
         if ($this->sellIn < 0) {
-            $this->decreaseQuantity();
+            $this->decreaseQuality();
         }
     }
 }
@@ -85,6 +85,19 @@ class BackstagePassesItem extends BasicItem
     }
 }
 
+class ConjuredItem extends BasicItem
+{
+    public function tick()
+    {
+        $this->decreaseSellIn();
+        $this->decreaseQuality(2);
+
+        if ($this->sellIn < 0) {
+            $this->decreaseQuality(2);
+        }
+    }
+}
+
 class BasicItemFactory
 {
     public static function create($name, $quality, $sellIn): BasicItem
@@ -98,6 +111,8 @@ class BasicItemFactory
                 return new SulfurasItem($quality, $sellIn);
             case 'Backstage passes to a TAFKAL80ETC concert':
                 return new BackstagePassesItem($quality, $sellIn);
+            case 'Conjured Mana Cake':
+                return new ConjuredItem($quality, $sellIn);
             default:
                 throw new \InvalidArgumentException("Unknown item type: $name");
         }
