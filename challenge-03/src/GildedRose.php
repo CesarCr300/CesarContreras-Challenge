@@ -62,6 +62,14 @@ class BrieItem extends BasicItem
     }
 }
 
+class SulfurasItem extends BasicItem
+{
+    public function tick()
+    {
+        // Sulfuras does not change, so no action needed
+    }
+}
+
 class BasicItemFactory
 {
     public static function create($name, $quality, $sellIn): BasicItem
@@ -71,6 +79,8 @@ class BasicItemFactory
                 return new NormalItem($name, $quality, $sellIn);
             case 'Aged Brie':
                 return new BrieItem($name, $quality, $sellIn);
+            case 'Sulfuras, Hand of Ragnaros':
+                return new SulfurasItem($name, $quality, $sellIn);
             default:
                 throw new \InvalidArgumentException("Unknown item type: $name");
         }
