@@ -25,7 +25,9 @@ class CharacterChallenge
 
     public function removePosition($position)
     {
-        if (count($this->positions) - 1 < $this->needsToHave) {
+        $quantityOfCharactersAfterRemove = count($this->positions) - 1;
+        //Only allow removal if it does not leave less than the required number of characters
+        if ($quantityOfCharactersAfterRemove < $this->needsToHave) {
             return false;
         }
         $index = array_search($position, $this->positions);
