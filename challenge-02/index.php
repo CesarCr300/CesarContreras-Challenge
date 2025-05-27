@@ -39,6 +39,7 @@ class CharacterChallenge
 function noIterate($strArr)
 {
     // code goes here
+    /** @var array<string, CharacterChallenge> */
     $charactersToFind = [];
     for ($index = 0; $index < strlen($strArr[1]); $index++) {
         $characterToFind = $strArr[1][$index];
@@ -48,7 +49,7 @@ function noIterate($strArr)
             $charactersToFind[$characterToFind] = new CharacterChallenge($characterToFind);
         }
     }
-
+    /** @var array<number, CharacterChallenge> */
     $positions = [];
 
     for ($index = 0; $index < strlen($strArr[0]); $index++) {
@@ -59,7 +60,6 @@ function noIterate($strArr)
         }
     }
 
-    //I want to do the same as below but once breaks, start from the last position until it breaks again and then stop.
     $start_index = 0;
     foreach ($positions as $position => $characterObject) {
         $success = $characterObject->removePosition($position);
