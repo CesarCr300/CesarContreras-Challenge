@@ -8,15 +8,13 @@ interface IBasicItem
 
 abstract class BasicItem implements IBasicItem
 {
-    public $name;
 
     public $quality;
 
     public $sellIn;
 
-    public function __construct($name, $quality, $sellIn)
+    public function __construct($quality, $sellIn)
     {
-        $this->name = $name;
         $this->quality = $quality;
         $this->sellIn = $sellIn;
     }
@@ -76,11 +74,11 @@ class BasicItemFactory
     {
         switch ($name) {
             case 'normal':
-                return new NormalItem($name, $quality, $sellIn);
+                return new NormalItem($quality, $sellIn);
             case 'Aged Brie':
-                return new BrieItem($name, $quality, $sellIn);
+                return new BrieItem($quality, $sellIn);
             case 'Sulfuras, Hand of Ragnaros':
-                return new SulfurasItem($name, $quality, $sellIn);
+                return new SulfurasItem($quality, $sellIn);
             default:
                 throw new \InvalidArgumentException("Unknown item type: $name");
         }
