@@ -56,6 +56,26 @@ function getMatchedCharacterPositions
     }
     return $positions;
 }
+
+/**
+ *  
+ * @param array<number, CharacterObject>$positions
+ * @return number
+ */
+function shrinkPositionsArray($positions): int
+{
+    $breakpoint = 0;
+    foreach ($positions as $position => $characterObject) {
+        $success = $characterObject->removePosition($position);
+        if (!$success) {
+            $breakpoint = $position;
+            break;
+        }
+        unset($positions[$position]);
+    }
+    return $breakpoint;
+}
+
 function noIterate($strArr)
 {
     // code goes here
@@ -69,33 +89,16 @@ function noIterate($strArr)
             $charactersToFind[$characterToFind] = new CharacterObject($characterToFind);
         }
     }
-    
+
     /** @var array<number, CharacterObject> */
     $positions = getMatchedCharacterPositions(
         str_split($strArr[0]),
         $charactersToFind
     );
 
-    $start_index = 0;
-    foreach ($positions as $position => $characterObject) {
-        $success = $characterObject->removePosition($position);
-        if (!$success) {
-            $start_index = $position;
-            break;
-        }
-        unset($positions[$position]);
-    }
+    $start_index = shrinkPositionsArray($positions);
 
-    $end_index = 0;
-    $positions = array_reverse($positions, true);
-    foreach ($positions as $position => $characterObject) {
-        $success = $characterObject->removePosition($position);
-        if (!$success) {
-            $end_index = $position;
-            break;
-        } else
-            unset($positions[$position]);
-    }
+    $end_index = shrinkPositionsArray(array_reverse($positions, true));
 
     return implode('', array_slice(str_split($strArr[0]), $start_index, $end_index - $start_index + 1));
 }
